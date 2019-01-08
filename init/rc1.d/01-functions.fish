@@ -82,8 +82,7 @@ end
 
 function tmuxer_home -d "goto home dir of current tmuxer"
   project set $CURRENT_TMUX_SESSION
-  # project home
-  tmux -2 attach-session -t $CURRENT_TMUX_SESSION
+  tmux switch -t $CURRENT_TMUX_SESSION
 end
 
 function tmuxer_goto -a tmuxer_name -d "switch tmuxers"
