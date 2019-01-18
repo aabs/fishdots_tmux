@@ -73,7 +73,9 @@ function tmuxer_help -d "display usage info"
 end
 
 function tmuxer_new -a session_name -d "create a new session if it does not already exist"
-  tmux -2 new -s $session_name
+  # create the session detached, then switch to it
+  tmux -2 new -d -s $session_name
+  tm goto $session_name
 end
 
 function tmuxer_list -d "list tmuxers with descriptions"
@@ -81,8 +83,15 @@ function tmuxer_list -d "list tmuxers with descriptions"
 end
 
 function tmuxer_home -d "goto home dir of current tmuxer"
-  project set $CURRENT_TMUX_SESSION
-  tmux switch -t $CURRENT_TMUX_SESSION
+  set -l NUM_TMUX_ENV_VARS (env | grep -i TMUX | wc -l)
+  echo "vars: $NUM_TMUX_ENV_VARS"
+  if test $NUM_TMUX_ENV_VARS -eq 0
+    echo "attaching"
+    tmux -2 attach -t $CURRENT_TMUX_SESSION
+  else
+    echo "switching"
+    tmux switch -t $CURRENT_TMUX_SESSION
+  end
 end
 
 function tmuxer_goto -a tmuxer_name -d "switch tmuxers"
