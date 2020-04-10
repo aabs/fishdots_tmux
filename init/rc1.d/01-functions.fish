@@ -1,88 +1,27 @@
 #!/usr/bin/fish
+define_command tm "fishdots plugin for using tmux"
 
-function tm
-  if test 0 -eq (count $argv)
-    tmuxer_help
-    return
-  end
-  switch $argv[1]
-    case set
-        tmuxer_set $argv[2]
-    case n
-        tmuxer_new $argv[2]
-    case new
-        tmuxer_new $argv[2]
-    case create
-        tmuxer_new $argv[2]
-    case d
-        tmuxer_detach
-    case detach
-        tmuxer_detach
-    case goto
-        tmuxer_goto $argv[2]
-    case help
-        tmuxer_help
-    case h
-        tmuxer_home
-    case home
-        tmuxer_home
-    case l
-        tmuxer_list
-    case ls
-        tmuxer_list
-    case o
-        tmuxer_open
-    case open
-        tmuxer_open
-    case '*'
-      tmuxer_help
-  end
-end
+define_subcommand_nonevented tm set tm_set "set current TMUX session"
+define_subcommand_nonevented tm new tm_new "create a new TMUX session"
+define_subcommand_nonevented tm create tm_create ""
+define_subcommand_nonevented tm detach tm_detach "disconnect from the current session"
+define_subcommand_nonevented tm goto tm_goto "change tmux sessions"
+define_subcommand_nonevented tm help tm_help ""
+define_subcommand_nonevented tm home tm_home "got to the current home tmux session"
+define_subcommand_nonevented tm ls tm_list "list all available tmuxers"
+define_subcommand_nonevented tm open tm_open "open from list dialog"
 
-function tmuxer_help -d "display usage info"
-  
-  echo "USAGE:"
-  echo ""
-  echo "tm <command> [options] [args]"
-  echo ""
-  
-  echo "tm new <name>"
-  echo "  create a new TMUX session"
-  echo ""
-
-  echo "tm goto <name>"
-  echo "  change tmux sessions"
-  echo ""
-
-  echo "tm help"
-  echo "  this..."
-  echo ""
-
-  echo "tm home"
-  echo "  got to the current home tmux session"
-  echo ""
-
-  echo "tm ls"
-  echo "  list all available tmuxers"
-  echo ""
-
-  echo "tm open"
-  echo "  open from list dialog"
-  echo ""
-
-end
-
-function tmuxer_new -a session_name -d "create a new session if it does not already exist"
+function tm_new -a session_name -d "create a new session if it does not already exist"
   # create the session detached, then switch to it
   tmux -2 new -d -s $session_name
   tm goto $session_name
 end
 
-function tmuxer_list -d "list tmuxers with descriptions"
+function tm_list -d "list tmuxers with descriptions"
   tmux ls | cut -d':' -f1 |sort
 end
 
-function tmuxer_home -d "goto home dir of current tmuxer"
+function tm_home -d "goto home dir of current tmuxer"
   set -l NUM_TMUX_ENV_VARS (env | grep -i TMUX | wc -l)
   echo "vars: $NUM_TMUX_ENV_VARS"
   if test $NUM_TMUX_ENV_VARS -eq 0
@@ -94,21 +33,21 @@ function tmuxer_home -d "goto home dir of current tmuxer"
   end
 end
 
-function tmuxer_goto -a tmuxer_name -d "switch tmuxers"
-  ok "Switching to $tmuxer_name"
-  tm set $tmuxer_name
+function tm_goto -a name -d "switch tmuxers"
+  ok "Switching to $name"
+  tm set $name
   tm home
 end
 
-function tmuxer_set -a tmuxer_name
-    set -U CURRENT_TMUX_SESSION $tmuxer_name
+function tm_set -a name
+    set -U CURRENT_TMUX_SESSION $name
 end
 
-function tmuxer_detach
+function tm_detach
     tmux detach 
 end
 
-function tmuxer_open -d "select from existing tmuxers"
+function tm_open -d "select from existing tmuxers"
   set matches (tm ls)
   if test 1 -eq (count $matches) and test -d $matches
     set -U CURRENT_TMUX_SESSION $matches[1]
