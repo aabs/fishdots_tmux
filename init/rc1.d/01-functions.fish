@@ -2,11 +2,9 @@
 define_command tm "fishdots plugin for using tmux"
 
 define_subcommand_nonevented tm set tm_set "set current TMUX session"
-define_subcommand_nonevented tm new tm_new "create a new TMUX session"
-define_subcommand_nonevented tm create tm_create ""
+define_subcommand_nonevented tm new tm_new "<session_name> create a new TMUX session"
 define_subcommand_nonevented tm detach tm_detach "disconnect from the current session"
-define_subcommand_nonevented tm goto tm_goto "change tmux sessions"
-define_subcommand_nonevented tm help tm_help ""
+define_subcommand_nonevented tm goto tm_goto "<name> change tmux sessions"
 define_subcommand_nonevented tm home tm_home "got to the current home tmux session"
 define_subcommand_nonevented tm ls tm_list "list all available tmuxers"
 define_subcommand_nonevented tm open tm_open "open from list dialog"

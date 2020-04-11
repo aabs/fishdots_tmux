@@ -1,6 +1,7 @@
 #tl: list sessions
-abbr --add tl   'tmux ls'
+abbr --add tl   'tm ls'
 #tn <name>: create a session named <name>
-abbr --add tn   'tmux -2 new -s'
+abbr --add tn   'tm new'
 #ta <name>: attach to a session named <name>
 abbr --add ta   'tmux -2 attach -t'
+abbr --add to 'tm open'
