@@ -8,11 +8,16 @@ define_subcommand_nonevented tm goto tm_goto "<name> change tmux sessions"
 define_subcommand_nonevented tm home tm_home "got to the current home tmux session"
 define_subcommand_nonevented tm ls tm_list "list all available tmuxers"
 define_subcommand_nonevented tm open tm_open "open from list dialog"
+define_subcommand_nonevented tm session tm_session "display the current session name"
 
 function tm_new -a session_name -d "create a new session if it does not already exist"
   # create the session detached, then switch to it
   tmux -2 new -d -s $session_name
   tm goto $session_name
+end
+
+function tm_session
+    tmux display-message -p '#S'
 end
 
 function tm_list -d "list tmuxers with descriptions"
