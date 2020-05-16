@@ -25,7 +25,7 @@ function tm_list -d "list tmuxers with descriptions"
 end
 
 function tm_home -d "goto home dir of current tmuxer"
-  set -l NUM_TMUX_ENV_VARS (env | grep -i TMUX | wc -l)
+  set -l NUM_TMUX_ENV_VARS (env | grep -e TMUX | wc -l)
   echo "vars: $NUM_TMUX_ENV_VARS"
   if test $NUM_TMUX_ENV_VARS -eq 0
     echo "attaching"
